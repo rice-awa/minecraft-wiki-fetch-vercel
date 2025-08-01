@@ -1,0 +1,54 @@
+# Kiro and Claude files
+.kiro
+.claude
+
+# Documentation (keeping spec docs)
+tmp_docs/*
+
+# Dependencies
+node_modules/
+
+# Example files
+example/
+
+# Environment variables
+.env
+
+# Logs
+logs/*.log
+
+# Coverage reports
+coverage/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
