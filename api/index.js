@@ -11,14 +11,14 @@ const rateLimit = require('express-rate-limit');
 // Import our custom modules
 const config = require('../src/config');
 const { logger, requestLoggingMiddleware } = require('../src/utils/logger');
-const { 
-  asyncHandler, 
-  notFoundHandler, 
-  errorHandler, 
-  validateRequest, 
-  sanitizeParams, 
+const {
+  asyncHandler,
+  notFoundHandler,
+  errorHandler,
+  validateRequest,
+  sanitizeParams,
   requestIdHandler,
-  corsErrorHandler 
+  corsErrorHandler
 } = require('../src/middleware/errorHandler');
 const { jsonFormatterMiddleware } = require('../src/middleware/jsonFormatter');
 const { apiRoutes, healthRoutes } = require('../src/routes');
@@ -54,13 +54,13 @@ app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    
+
     const allowedOrigins = config.security.allowedOrigins;
-    
+
     if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
-    
+
     const error = new Error(`Origin ${origin} not allowed by CORS policy`);
     error.statusCode = 403;
     callback(error);
@@ -92,7 +92,7 @@ const limiter = rateLimit({
       url: req.originalUrl,
       method: req.method
     });
-    
+
     res.status(429).json({
       success: false,
       error: {
@@ -109,7 +109,7 @@ const limiter = rateLimit({
   skip: (req) => {
     return req.path.startsWith('/health');
   }
-}));
+});
 app.use(limiter);
 
 // Request validation and sanitization
@@ -121,13 +121,13 @@ app.use(validateRequest({
 app.use(sanitizeParams);
 
 // Body parsing middleware
-app.use(express.json({ 
+app.use(express.json({
   limit: '10mb',
   type: 'application/json'
 }));
 
-app.use(express.urlencoded({ 
-  extended: true, 
+app.use(express.urlencoded({
+  extended: true,
   limit: '10mb',
   parameterLimit: 1000,
   type: 'application/x-www-form-urlencoded'
