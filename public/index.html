@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Wiki API</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .endpoint { background: #f5f5f5; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        code { background: #e8e8e8; padding: 2px 4px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>Minecraft Wiki API</h1>
+    <p>这是一个Minecraft中文Wiki的API服务，提供搜索和页面内容获取功能。</p>
+    
+    <h2>API端点</h2>
+    <div class="endpoint">
+        <strong>搜索:</strong> <code>GET /api/search?q=钻石</code>
+    </div>
+    <div class="endpoint">
+        <strong>获取页面:</strong> <code>GET /api/page/钻石</code>
+    </div>
+    <div class="endpoint">
+        <strong>健康检查:</strong> <code>GET /health</code>
+    </div>
+    
+    <h2>快速测试</h2>
+    <p><a href="/api/search?q=钻石&pretty=true" target="_blank">搜索"钻石"</a></p>
+    <p><a href="/health" target="_blank">健康检查</a></p>
+    
+    <script>
+        // 自动跳转到API根端点，显示完整API信息
+        if (window.location.pathname === '/') {
+            setTimeout(() => {
+                window.location.href = '/api';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
