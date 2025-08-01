@@ -11,7 +11,7 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/health/(.*)",
+      "source": "/health(.*)",
       "destination": "/api/index.js"
     }
   ],
