@@ -22,10 +22,25 @@
   ],
   "functions": {
     "api/index.js": {
-      "maxDuration": 30
+      "maxDuration": 30,
+      "memory": 1024
     }
   },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=300, stale-while-revalidate"
+        }
+      ]
+    }
+  ],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "WIKI_BASE_URL": "https://zh.minecraft.wiki",
+    "REQUEST_TIMEOUT": "15000",
+    "RATE_LIMIT_MAX": "50"
   }
 }

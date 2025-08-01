@@ -6,9 +6,11 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "vercel-dev": "vercel dev",
+    "dev:vercel": "vercel dev",
+    "build": "echo 'No build step required for serverless functions'",
     "deploy": "vercel --prod",
     "deploy:preview": "vercel",
+    "logs": "vercel logs",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
