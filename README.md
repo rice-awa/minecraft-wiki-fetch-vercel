@@ -1,12 +1,16 @@
 # Minecraft Wiki API - Serverless版本
 
-这是Minecraft Wiki API的Vercel Serverless版本，可以直接部署到Vercel平台使用。
-
+这是Minecraft Wiki API的Vercel Serverless版本，可以直接部署到Vercel平台使用。本地或服务器部署请查看[服务器部署版本](https://github.com/rice-awa/minecraft-wiki-fetch)
 ## 🚀 快速部署
 
 ### 一键部署到Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rice-awa/minecraft-wiki-fetch/tree/vercel)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rice-awa/minecraft-wiki-fetch-vercle)
+
+### 带环境变量部署：
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rice-awa/minecraft-wiki-fetch-vercel&env=WIKI_BASE_URL,REQUEST_TIMEOUT,RATE_LIMIT_MAX&envDescription=API%20Configuration&envLink=https://github.com/rice-awa/minecraft-wiki-fetch-vercel/blob/main/.env.vercel)
+
+### **注意：**Vercel的域名在国内可能无法访问，因此需要使用自己的自定义域名。
 
 ### 手动部署
 
@@ -210,6 +214,17 @@ API使用统一的错误响应格式：
 }
 ```
 
+### ❓ 常见问题
+
+**Q: 部署失败怎么办？**
+A: 检查 package.json 中的依赖，确保 Node.js 版本 >= 18.0.0
+
+**Q: 函数超时怎么办？**
+A: 检查 REQUEST_TIMEOUT 设置，确保不超过 30 秒
+
+**Q: 如何查看日志？**
+A: 使用 `vercel logs https://your-project.vercel.app`
+
 ### 常见错误码
 
 | 错误码 | HTTP状态码 | 说明 |
@@ -218,6 +233,10 @@ API使用统一的错误响应格式：
 | `PAGE_NOT_FOUND` | 404 | 页面不存在 |
 | `RATE_LIMIT_EXCEEDED` | 429 | 请求频率超限 |
 | `INTERNAL_SERVER_ERROR` | 500 | 服务器内部错误 |
+
+## 🔄 更新部署
+
+推送代码到 Git 仓库会自动触发重新部署。
 
 ## 📈 性能优化
 
@@ -241,10 +260,31 @@ API使用统一的错误响应格式：
 
 ## 📞 技术支持
 
-- **文档**: [完整API文档](./docs/API_DOCUMENTATION.md)
+- **API文档**: [完整API文档](./docs/API_DOCUMENTATION.md)
+- **serverless迁移说明**: [serverless迁移说明](./SERVERLESS-MIGRATION.md)
 - **问题反馈**: [GitHub Issues](https://github.com/your-username/minecraft-wiki-api/issues)
 - **更新日志**: [CHANGELOG.md](./CHANGELOG.md)
 
 ## 📄 许可证
 
 MIT License - 详见 [LICENSE](./LICENSE) 文件。
+
+### 内容归属
+
+- **Mojang 内容**: 版权归 Mojang Studios 所有，遵循《Minecraft 使用准则》
+- **特别注明内容**: 版权归原作者所有
+- **其他内容**: 遵循 CC BY-NC-SA 3.0 许可协议
+
+### 重要提醒
+
+1. **本项目仅提供技术工具**，用于访问和解析公开的 Wiki 内容
+2. **用户有责任**遵守相关版权法律和许可协议
+3. **商业使用**前请确保获得适当的授权
+4. **转载内容**时请注明来自中文 Minecraft Wiki
+
+## 免责声明
+
+1. 本项目不拥有任何 Minecraft Wiki 内容的版权
+2. 本项目不对通过 API 获取的内容的准确性、完整性或时效性承担责任
+3. 用户使用本项目获取的内容时，应自行承担相关法律责任
+4. 如有版权争议，请联系项目维护者进行处理
