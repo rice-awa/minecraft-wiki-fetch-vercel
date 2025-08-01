@@ -3,39 +3,588 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Wiki API</title>
+    <title>Minecraft Wiki API - 测试控制台</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
-        .endpoint { background: #f5f5f5; padding: 10px; margin: 10px 0; border-radius: 5px; }
-        code { background: #e8e8e8; padding: 2px 4px; border-radius: 3px; }
+        :root {
+            --black: #111;
+            --dark-gray: #222;
+            --gray: #444;
+            --light-gray: #888;
+            --lighter-gray: #eee;
+            --white: #fff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--black);
+            color: var(--white);
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        main {
+            flex: 1;
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--lighter-gray);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--black);
+            font-weight: 500;
+        }
+
+        .description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-link {
+            background: var(--white);
+            border: 1px solid var(--lighter-gray);
+            border-radius: 4px;
+            padding: 1rem;
+            text-decoration: none;
+            color: var(--black);
+            transition: all 0.2s ease;
+        }
+
+        .quick-link:hover {
+            border-color: var(--black);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .quick-link h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .quick-link p {
+            color: var(--light-gray);
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+            max-width: 600px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--black);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--lighter-gray);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: border 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--black);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        button {
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: var(--dark-gray);
+        }
+
+        button.secondary {
+            background: var(--gray);
+        }
+
+        button.secondary:hover {
+            background: var(--dark-gray);
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            border: 1px solid var(--lighter-gray);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .result-header {
+            background: var(--lighter-gray);
+            color: var(--black);
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--lighter-gray);
+        }
+
+        .result-content {
+            background: var(--white);
+            color: var(--black);
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--black);
+            color: var(--black);
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--gray);
+        }
+
+        .spinner {
+            border: 2px solid var(--lighter-gray);
+            border-top: 2px solid var(--black);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 0.75rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            main {
+                padding: 1rem;
+            }
+            
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                gap: 0.5rem;
+            }
+            
+            button {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Minecraft Wiki API</h1>
-    <p>这是一个Minecraft中文Wiki的API服务，提供搜索和页面内容获取功能。</p>
-    
-    <h2>API端点</h2>
-    <div class="endpoint">
-        <strong>搜索:</strong> <code>GET /api/search?q=钻石</code>
-    </div>
-    <div class="endpoint">
-        <strong>获取页面:</strong> <code>GET /api/page/钻石</code>
-    </div>
-    <div class="endpoint">
-        <strong>健康检查:</strong> <code>GET /health</code>
-    </div>
-    
-    <h2>快速测试</h2>
-    <p><a href="/api/search?q=钻石&pretty=true" target="_blank">搜索"钻石"</a></p>
-    <p><a href="/health" target="_blank">健康检查</a></p>
-    
+    <header>
+        <h1>Minecraft Wiki API</h1>
+        <p class="subtitle">测试控制台 - 中文Wiki数据获取服务</p>
+    </header>
+
+    <main>
+        <!-- 快速链接 -->
+        <section>
+            <h2>快速链接</h2>
+            <div class="quick-links">
+                <a href="/health" class="quick-link" target="_blank">
+                    <h3>健康检查</h3>
+                    <p>检查服务状态</p>
+                </a>
+                <a href="/api" class="quick-link" target="_blank">
+                    <h3>API文档</h3>
+                    <p>查看完整API信息</p>
+                </a>
+                <a href="/api/search?q=钻石&pretty=true" class="quick-link" target="_blank">
+                    <h3>快速搜索</h3>
+                    <p>搜索"钻石"示例</p>
+                </a>
+                <a href="/api/page/钻石?pretty=true" class="quick-link" target="_blank">
+                    <h3>页面示例</h3>
+                    <p>获取"钻石"页面</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- 健康检查测试 -->
+        <section>
+            <h2>健康检查测试</h2>
+            <p class="description">检查API服务的运行状态和依赖服务连接情况</p>
+            <div class="button-group">
+                <button onclick="testHealth('/health')">基础健康检查</button>
+                <button class="secondary" onclick="testHealth('/health/detailed')">详细健康检查</button>
+                <button class="secondary" onclick="testHealth('/health/ready')">就绪状态检查</button>
+                <button onclick="testHealth('/health/live')">存活状态检查</button>
+            </div>
+            <div id="health-result" class="result-container">
+                <div class="result-header">
+                    <span>健康检查结果</span>
+                    <button class="copy-btn" onclick="copyResult('health-result')">复制</button>
+                </div>
+                <div class="result-content" id="health-content"></div>
+            </div>
+        </section>
+
+        <!-- 搜索功能测试 -->
+        <section>
+            <h2>搜索功能测试</h2>
+            <p class="description">测试Wiki内容搜索功能</p>
+            <div class="form-group">
+                <label for="search-keyword">搜索关键词:</label>
+                <input type="text" id="search-keyword" value="钻石" placeholder="输入要搜索的关键词">
+            </div>
+            <div class="form-group">
+                <label for="search-limit">结果数量:</label>
+                <input type="number" id="search-limit" value="10" min="1" max="30">
+            </div>
+            <div class="button-group">
+                <button onclick="testSearch()">执行搜索</button>
+                <button class="secondary" onclick="testSearch(true)">格式化输出</button>
+                <button onclick="quickSearch('红石')">快速搜索: 红石</button>
+                <button onclick="quickSearch('合成')">快速搜索: 合成</button>
+            </div>
+            <div id="search-result" class="result-container">
+                <div class="result-header">
+                    <span>搜索结果</span>
+                    <button class="copy-btn" onclick="copyResult('search-result')">复制</button>
+                </div>
+                <div class="result-content" id="search-content"></div>
+            </div>
+        </section>
+
+        <!-- 页面获取测试 -->
+        <section>
+            <h2>页面内容获取测试</h2>
+            <p class="description">获取Wiki页面的详细内容</p>
+            <div class="form-group">
+                <label for="page-name">页面名称:</label>
+                <input type="text" id="page-name" value="钻石" placeholder="输入页面名称">
+            </div>
+            <div class="form-group">
+                <label for="page-format">输出格式:</label>
+                <select id="page-format">
+                    <option value="both">both - HTML和Markdown</option>
+                    <option value="html">html - 仅HTML</option>
+                    <option value="markdown">markdown - 仅Markdown</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button onclick="testPage()">获取页面</button>
+                <button class="secondary" onclick="testPage(true)">格式化输出</button>
+                <button onclick="quickPage('铁锭')">快速获取: 铁锭</button>
+                <button onclick="quickPage('末影龙')">快速获取: 末影龙</button>
+                <button onclick="testPageExists()">检查页面是否存在</button>
+            </div>
+            <div id="page-result" class="result-container">
+                <div class="result-header">
+                    <span>页面内容结果</span>
+                    <button class="copy-btn" onclick="copyResult('page-result')">复制</button>
+                </div>
+                <div class="result-content" id="page-content"></div>
+            </div>
+        </section>
+
+        <!-- 批量操作测试 -->
+        <section>
+            <h2>批量页面获取测试</h2>
+            <p class="description">同时获取多个页面的内容</p>
+            <div class="form-group">
+                <label for="batch-pages">页面列表 (每行一个):</label>
+                <textarea id="batch-pages" placeholder="钻石&#10;铁锭&#10;金锭&#10;红石">钻石
+铁锭
+金锭
+红石</textarea>
+            </div>
+            <div class="form-group">
+                <label for="batch-format">输出格式:</label>
+                <select id="batch-format">
+                    <option value="markdown">markdown</option>
+                    <option value="html">html</option>
+                    <option value="both">both</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="batch-concurrency">并发数:</label>
+                <input type="number" id="batch-concurrency" value="3" min="1" max="5">
+            </div>
+            <div class="button-group">
+                <button onclick="testBatchPages()">批量获取</button>
+                <button class="secondary" onclick="loadPreset('tools')">预设: 工具</button>
+                <button class="secondary" onclick="loadPreset('blocks')">预设: 方块</button>
+            </div>
+            <div id="batch-result" class="result-container">
+                <div class="result-header">
+                    <span>批量操作结果</span>
+                    <button class="copy-btn" onclick="copyResult('batch-result')">复制</button>
+                </div>
+                <div class="result-content" id="batch-content"></div>
+            </div>
+        </section>
+    </main>
+
     <script>
-        // 自动跳转到API根端点，显示完整API信息
-        if (window.location.pathname === '/') {
-            setTimeout(() => {
-                window.location.href = '/api';
-            }, 3000);
+        // API基础URL
+        const API_BASE = window.location.origin;
+
+        // 通用请求函数
+        async function makeRequest(url, options = {}) {
+            const resultElement = options.resultElement;
+            const contentElement = options.contentElement;
+
+            if (resultElement) resultElement.style.display = 'block';
+            if (contentElement) contentElement.innerHTML = '<div class="loading"><div class="spinner"></div>请求中...</div>';
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                
+                if (contentElement) {
+                    contentElement.textContent = JSON.stringify(data, null, 2);
+                }
+                
+                return { success: true, data, status: response.status };
+            } catch (error) {
+                if (contentElement) {
+                    contentElement.textContent = `请求失败: ${error.message}`;
+                }
+                return { success: false, error: error.message };
+            }
         }
+
+        // 健康检查测试
+        async function testHealth(endpoint) {
+            const url = `${API_BASE}${endpoint}`;
+            await makeRequest(url, {
+                resultElement: document.getElementById('health-result'),
+                contentElement: document.getElementById('health-content')
+            });
+        }
+
+        // 搜索测试
+        async function testSearch(pretty = false) {
+            const keyword = document.getElementById('search-keyword').value;
+            const limit = document.getElementById('search-limit').value;
+            
+            if (!keyword.trim()) {
+                alert('请输入搜索关键词');
+                return;
+            }
+
+            const params = new URLSearchParams({
+                q: keyword,
+                limit: limit
+            });
+            
+            if (pretty) params.append('pretty', 'true');
+            
+            const url = `${API_BASE}/api/search?${params}`;
+            await makeRequest(url, {
+                resultElement: document.getElementById('search-result'),
+                contentElement: document.getElementById('search-content')
+            });
+        }
+
+        // 快速搜索
+        async function quickSearch(keyword) {
+            document.getElementById('search-keyword').value = keyword;
+            await testSearch(true);
+        }
+
+        // 页面获取测试
+        async function testPage(pretty = false) {
+            const pageName = document.getElementById('page-name').value;
+            const format = document.getElementById('page-format').value;
+            
+            if (!pageName.trim()) {
+                alert('请输入页面名称');
+                return;
+            }
+
+            const params = new URLSearchParams({ format });
+            if (pretty) params.append('pretty', 'true');
+            
+            const url = `${API_BASE}/api/page/${encodeURIComponent(pageName)}?${params}`;
+            await makeRequest(url, {
+                resultElement: document.getElementById('page-result'),
+                contentElement: document.getElementById('page-content')
+            });
+        }
+
+        // 快速页面获取
+        async function quickPage(pageName) {
+            document.getElementById('page-name').value = pageName;
+            await testPage(true);
+        }
+
+        // 检查页面是否存在
+        async function testPageExists() {
+            const pageName = document.getElementById('page-name').value;
+            
+            if (!pageName.trim()) {
+                alert('请输入页面名称');
+                return;
+            }
+            
+            const url = `${API_BASE}/api/page/${encodeURIComponent(pageName)}/exists`;
+            await makeRequest(url, {
+                resultElement: document.getElementById('page-result'),
+                contentElement: document.getElementById('page-content')
+            });
+        }
+
+        // 批量页面获取
+        async function testBatchPages() {
+            const pagesText = document.getElementById('batch-pages').value;
+            const format = document.getElementById('batch-format').value;
+            const concurrency = parseInt(document.getElementById('batch-concurrency').value);
+            
+            const pages = pagesText.split('\n').map(p => p.trim()).filter(p => p);
+            
+            if (pages.length === 0) {
+                alert('请输入至少一个页面名称');
+                return;
+            }
+
+            const requestBody = {
+                pages,
+                format,
+                concurrency
+            };
+
+            await makeRequest(`${API_BASE}/api/pages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+                resultElement: document.getElementById('batch-result'),
+                contentElement: document.getElementById('batch-content')
+            });
+        }
+
+        // 加载预设
+        function loadPreset(type) {
+            const presets = {
+                tools: ['钻石剑', '钻石镐', '钻石斧', '钻石锹'],
+                blocks: ['钻石块', '铁块', '金块', '红石块']
+            };
+            
+            if (presets[type]) {
+                document.getElementById('batch-pages').value = presets[type].join('\n');
+            }
+        }
+
+        // 复制结果
+        function copyResult(containerId) {
+            const container = document.getElementById(containerId);
+            const content = container.querySelector('.result-content').textContent;
+            
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = container.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '已复制!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }).catch(() => {
+                alert('复制失败，请手动选择内容复制');
+            });
+        }
+
+        // 页面加载完成后执行健康检查
+        document.addEventListener('DOMContentLoaded', function() {
+            // 自动执行一次基础健康检查
+            testHealth('/health');
+        });
     </script>
 </body>
 </html>
